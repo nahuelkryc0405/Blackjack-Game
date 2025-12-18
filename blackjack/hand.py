@@ -7,7 +7,7 @@ from .cards import Card, VALUES
 
 
 @dataclass
-class Hand:
+class Hand: 
     cards: List[Card] = field(default_factory=list)
 
     def add(self, card: Card) -> None:

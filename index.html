@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackjack Arcade - Edición Deluxe</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background-animation"></div>
+
+    <div class="game-container">
+        <!-- Header con stats del jugador -->
+        <header class="game-header">
+            <div class="player-stats">
+                <div class="stat-item">
+                    <span class="stat-icon">💰</span>
+                    <span class="stat-label">Bankroll:</span>
+                    <span id="bankroll" class="stat-value">1000</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">⭐</span>
+                    <span class="stat-label">Nivel:</span>
+                    <span id="level" class="stat-value">1</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">✨</span>
+                    <span class="stat-label">XP:</span>
+                    <span id="xp" class="stat-value">0</span>
+                    <span class="stat-separator">/</span>
+                    <span id="xp-needed" class="stat-value">100</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">🏆</span>
+                    <span class="stat-label">Victorias:</span>
+                    <span id="wins" class="stat-value">0</span>
+                </div>
+            </div>
+            <div class="xp-bar-container">
+                <div id="xp-bar" class="xp-bar"></div>
+            </div>
+        </header>
+
+        <!-- Título principal -->
+        <div class="title-container">
+            <h1 class="game-title">
+                <span class="title-icon">♠️</span>
+                BLACKJACK ARCADE
+                <span class="title-icon">♥️</span>
+            </h1>
+            <p class="game-subtitle">Edición Deluxe con Desbloqueables</p>
+        </div>
+
+        <!-- Panel de apuestas -->
+        <div class="bet-panel">
+            <div class="bet-info">
+                <label for="bet-amount">Apuesta Actual:</label>
+                <input type="number" id="bet-amount" value="10" min="1" step="1">
+            </div>
+            <div class="bet-controls">
+                <button class="bet-btn" onclick="game.adjustBet(-10)">-10</button>
+                <button class="bet-btn" onclick="game.adjustBet(-5)">-5</button>
+                <button class="bet-btn" onclick="game.adjustBet(5)">+5</button>
+                <button class="bet-btn" onclick="game.adjustBet(10)">+10</button>
+                <button class="bet-btn special" onclick="game.setBetMax()">MAX</button>
+            </div>
+        </div>
+
+        <!-- Mesa de juego -->
+        <div class="game-table">
+            <!-- Mano del dealer -->
+            <div class="hand dealer-hand">
+                <h2 class="hand-title">Dealer <span id="dealer-score" class="score">0</span></h2>
+                <div id="dealer-cards" class="cards-container"></div>
+            </div>
+
+            <!-- Resultado -->
+            <div id="result-message" class="result-message"></div>
+
+            <!-- Mano del jugador -->
+            <div class="hand player-hand">
+                <h2 class="hand-title">Jugador <span id="player-score" class="score">0</span></h2>
+                <div id="player-cards" class="cards-container"></div>
+            </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="action-buttons">
+            <button id="deal-btn" class="action-btn primary" onclick="game.deal()">
+                <span class="btn-icon">🎴</span> REPARTIR
+            </button>
+            <button id="hit-btn" class="action-btn" onclick="game.hit()" disabled>
+                <span class="btn-icon">➕</span> PEDIR
+            </button>
+            <button id="stand-btn" class="action-btn" onclick="game.stand()" disabled>
+                <span class="btn-icon">✋</span> PLANTARSE
+            </button>
+            <button id="double-btn" class="action-btn" onclick="game.double()" disabled>
+                <span class="btn-icon">💎</span> DOBLAR
+            </button>
+        </div>
+
+        <!-- Botones adicionales -->
+        <div class="extra-buttons">
+            <button class="extra-btn" onclick="game.showAchievements()">
+                <span class="btn-icon">🏆</span> Logros
+            </button>
+            <button class="extra-btn" onclick="game.showUnlockables()">
+                <span class="btn-icon">🎁</span> Desbloqueables
+            </button>
+            <button class="extra-btn" onclick="game.showStats()">
+                <span class="btn-icon">📊</span> Estadísticas
+            </button>
+            <button class="extra-btn" onclick="game.toggleTheme()">
+                <span class="btn-icon">🎨</span> Tema
+            </button>
+            <button class="extra-btn" onclick="game.toggleSound()">
+                <span id="sound-icon" class="btn-icon">🔊</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal para logros -->
+    <div id="achievements-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="game.closeModal('achievements-modal')">&times;</span>
+            <h2>🏆 Logros Desbloqueados</h2>
+            <div id="achievements-list" class="achievements-grid"></div>
+        </div>
+    </div>
+
+    <!-- Modal para desbloqueables -->
+    <div id="unlockables-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="game.closeModal('unlockables-modal')">&times;</span>
+            <h2>🎁 Desbloqueables</h2>
+            <div id="unlockables-list" class="unlockables-grid"></div>
+        </div>
+    </div>
+
+    <!-- Modal para estadísticas -->
+    <div id="stats-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="game.closeModal('stats-modal')">&times;</span>
+            <h2>📊 Estadísticas del Jugador</h2>
+            <div id="stats-content" class="stats-content"></div>
+        </div>
+    </div>
+
+    <!-- Notificación flotante -->
+    <div id="notification" class="notification"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
