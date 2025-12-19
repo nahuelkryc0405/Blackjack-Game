@@ -535,6 +535,11 @@ class BlackjackGame {
 
         // Renderizar manos finales
         this.renderHands(false);
+
+        // Verificar si se acabaron los créditos
+        if (this.bankroll <= 0) {
+            setTimeout(() => this.showGameOver(), 2000);
+        }
     }
 
     // ========================================
@@ -1002,6 +1007,72 @@ class BlackjackGame {
             localStorage.removeItem('blackjackSave');
             location.reload();
         }
+    }
+
+    // ========================================
+    // SISTEMA DE GAME OVER
+    // ========================================
+
+    showGameOver() {
+        const modal = document.getElementById('gameover-modal');
+
+        // Actualizar estadísticas del modal
+        document.getElementById('gameover-wins').textContent = this.totalWins;
+        document.getElementById('gameover-level').textContent = this.level;
+        document.getElementById('gameover-blackjacks').textContent = this.totalBlackjacks;
+
+        // Deshabilitar botones de juego
+        document.getElementById('deal-btn').disabled = true;
+
+        // Mostrar modal
+        modal.style.display = 'block';
+
+        this.playSound('lose');
+    }
+
+    restartGame() {
+        // Resetear valores básicos pero mantener logros
+        this.bankroll = 1000;
+        this.currentBet = 10;
+        this.gameInProgress = false;
+        this.playerHand = [];
+        this.dealerHand = [];
+
+        // Resetear estadísticas de juego pero mantener nivel y XP
+        this.totalWins = 0;
+        this.totalLosses = 0;
+        this.totalPushes = 0;
+        this.totalBlackjacks = 0;
+        this.totalHands = 0;
+        this.highestBankroll = 1000;
+        this.biggestWin = 0;
+        this.currentStreak = 0;
+
+        // Actualizar UI
+        this.updateUI();
+        this.updateButtons();
+        this.renderHands(false);
+
+        // Limpiar cartas
+        document.getElementById('player-cards').innerHTML = '';
+        document.getElementById('dealer-cards').innerHTML = '';
+        document.getElementById('player-score').textContent = '0';
+        document.getElementById('dealer-score').textContent = '0';
+        document.getElementById('result-message').textContent = '';
+        document.getElementById('result-message').className = 'result-message';
+
+        // Resetear apuesta
+        document.getElementById('bet-amount').value = 10;
+
+        // Cerrar modal
+        document.getElementById('gameover-modal').style.display = 'none';
+
+        // Guardar el nuevo estado
+        this.saveGame();
+
+        // Mostrar notificación
+        this.showNotification('¡Nuevo comienzo! Buena suerte', 'success');
+        this.playSound('levelUp');
     }
 }
 

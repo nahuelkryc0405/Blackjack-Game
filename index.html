@@ -150,6 +150,34 @@
     <!-- Notificación flotante -->
     <div id="notification" class="notification"></div>
 
+    <!-- Modal de Game Over -->
+    <div id="gameover-modal" class="modal">
+        <div class="modal-content gameover-content">
+            <h2 class="gameover-title">💔 ¡Te has quedado sin créditos! 💔</h2>
+            <p class="gameover-message">No te preocupes, puedes empezar de nuevo con 1000 créditos</p>
+            <div class="gameover-stats">
+                <div class="gameover-stat">
+                    <span class="gameover-stat-icon">🏆</span>
+                    <span id="gameover-wins" class="gameover-stat-value">0</span>
+                    <span class="gameover-stat-label">Victorias</span>
+                </div>
+                <div class="gameover-stat">
+                    <span class="gameover-stat-icon">⭐</span>
+                    <span id="gameover-level" class="gameover-stat-value">1</span>
+                    <span class="gameover-stat-label">Nivel Alcanzado</span>
+                </div>
+                <div class="gameover-stat">
+                    <span class="gameover-stat-icon">♠️</span>
+                    <span id="gameover-blackjacks" class="gameover-stat-value">0</span>
+                    <span class="gameover-stat-label">Blackjacks</span>
+                </div>
+            </div>
+            <button class="restart-btn" onclick="game.restartGame()">
+                <span class="btn-icon">🔄</span> REINICIAR JUEGO
+            </button>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
